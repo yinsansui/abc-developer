@@ -1,11 +1,12 @@
-import type { PlasmoCSConfig } from "plasmo"
+import type {PlasmoCSConfig} from "plasmo"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://www.plasmo.com/*"]
+    matches: ["https://*/*"]
 }
 
-window.addEventListener("load", () => {
-  console.log("content script loaded")
+chrome.runtime.onMessage.addListener((request: any, sender, sendResponse: any) => {
+    const currentClinicInfo = window.localStorage.getItem('_current_clinic_');
+    sendResponse(currentClinicInfo);
+});
 
-  document.body.style.background = "pink"
-})
+export {}
