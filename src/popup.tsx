@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import {useImmer} from "use-immer";
 import './popup.css'
+import type {CurrentClinicInfo, CurrentEmployeeInfo} from "~contents/plasmo";
 
 interface OrganInfo {
     id: string
@@ -18,6 +19,10 @@ interface CurrentInfo {
     chain: OrganInfo
     clinic: OrganInfo
     employee: EmployeeInfo
+}
+
+export interface Command {
+    cmd: string
 }
 
 function IndexPopup() {
@@ -46,22 +51,41 @@ function IndexPopup() {
     }
 
     function getCurrentClinicInfo(): void {
-        sendMessageToContentScript({cmd: 'getClinicInfo', value: '你好，我是popup！'}, function (response: any) {
-            const clinicInfo = JSON.parse(response);
-            console.log(clinicInfo);
+        const command: Command = {cmd: 'getCurrentClinicInfo'}
+        sendMessageToContentScript(command, function (clinicInfo: CurrentClinicInfo) {
             setCurrentInfo(draft => {
-                draft.chain.id = clinicInfo.value.chain.id;
-                draft.chain.shortId = clinicInfo.value.chain.shortId;
-                draft.chain.name = clinicInfo.value.chain.name;
-                draft.clinic.id = clinicInfo.value.clinicId;
-                draft.clinic.shortId = clinicInfo.value.shortId;
-                draft.clinic.name = clinicInfo.value.clinicName;
+                // 连锁信息
+                draft.chain.id = clinicInfo.chain.id;
+                draft.chain.shortId = clinicInfo.chain.shortId;
+                draft.chain.name = clinicInfo.chain.name;
+
+                // 门店信息
+                draft.clinic.id = clinicInfo.clinicId;
+                draft.clinic.shortId = clinicInfo.shortId;
+                draft.clinic.name = clinicInfo.clinicName;
+            })
+        });
+    }
+
+    function getCurrentEmployeeInfo(): void {
+        const command: Command = {cmd: "getCurrentEmployeeInfo"}
+        sendMessageToContentScript(command, function (currentEmployeeInfo: CurrentEmployeeInfo) {
+            if (!currentEmployeeInfo) {
+                return;
+            }
+
+            setCurrentInfo((draft: CurrentInfo) => {
+                // 连锁信息
+                draft.employee.id = currentEmployeeInfo.employeeId;
+                draft.employee.shortId = currentEmployeeInfo.employeeShortId;
+                draft.employee.name = currentEmployeeInfo.employeeName;
             })
         });
     }
 
     useEffect(() => {
         getCurrentClinicInfo();
+        getCurrentEmployeeInfo();
     })
 
     return (
