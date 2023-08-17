@@ -1,16 +1,41 @@
 import {useEffect, useState} from "react"
+import {useImmer} from "use-immer";
+import './popup.css'
 
+interface OrganInfo {
+    id: string
+    shortId: string
+    name: string
+}
+
+interface EmployeeInfo {
+    id: string
+    shortId: string
+    name: string
+}
+
+interface CurrentInfo {
+    chain: OrganInfo
+    clinic: OrganInfo
+    employee: EmployeeInfo
+}
 
 function IndexPopup() {
-    const [chainId, setChainId] = useState('');
-    const [chainShortId, setChainShortId] = useState('');
-    const [chainName, setChainName] = useState('');
-    const [clinicId, setClinicId] = useState('');
-    const [clinicShortId, setClinicShortId] = useState('');
-    const [clinicName, setClinicName] = useState('');
-    const [employeeId, setEmployeeId] = useState('');
-    const [employeeShortId, setEmployeeShortId] = useState('');
-    const [employeeName, setEmployeeName] = useState('');
+    const [currentInfo, setCurrentInfo] = useImmer<CurrentInfo>({
+        chain: {
+            id: '',
+            shortId: '',
+            name: ''
+        }, clinic: {
+            id: '',
+            shortId: '',
+            name: ''
+        }, employee: {
+            id: '',
+            shortId: '',
+            name: ''
+        }
+    })
 
     function sendMessageToContentScript(message, callback) {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
@@ -24,12 +49,14 @@ function IndexPopup() {
         sendMessageToContentScript({cmd: 'getClinicInfo', value: '你好，我是popup！'}, function (response: any) {
             const clinicInfo = JSON.parse(response);
             console.log(clinicInfo);
-            setChainId(clinicInfo.value.chain.id);
-            setChainShortId(clinicInfo.value.chain.shortId);
-            setChainName(clinicInfo.value.chain.name);
-            setClinicId(clinicInfo.value.clinicId);
-            setClinicShortId(clinicInfo.value.shortId);
-            setClinicName(clinicInfo.value.clinicName);
+            setCurrentInfo(draft => {
+                draft.chain.id = clinicInfo.value.chain.id;
+                draft.chain.shortId = clinicInfo.value.chain.shortId;
+                draft.chain.name = clinicInfo.value.chain.name;
+                draft.clinic.id = clinicInfo.value.clinicId;
+                draft.clinic.shortId = clinicInfo.value.shortId;
+                draft.clinic.name = clinicInfo.value.clinicName;
+            })
         });
     }
 
@@ -40,46 +67,46 @@ function IndexPopup() {
     return (
         <div
             style={{
-                display: "flex",
+                // display: "flex",
                 flexDirection: "column",
                 padding: 16
             }}>
             <div>
                 <div>
                     <span>chainId:</span>
-                    <span>{chainId}</span>
+                    <span className="selectable">{currentInfo.chain.id}</span>
                 </div>
                 <div>
                     <span>chainShortId:</span>
-                    <span>{chainShortId}</span>
+                    <span className="selectable">{currentInfo.chain.shortId}</span>
                 </div>
                 <div>
                     <span>chainName:</span>
-                    <span>{chainName}</span>
+                    <span className="selectable">{currentInfo.chain.name}</span>
                 </div>
                 <div>
                     <span>clinicId:</span>
-                    <span>{clinicId}</span>
+                    <span className="selectable">{currentInfo.clinic.id}</span>
                 </div>
                 <div>
                     <span>clinicShortId:</span>
-                    <span>{clinicShortId}</span>
+                    <span className="selectable">{currentInfo.clinic.shortId}</span>
                 </div>
                 <div>
                     <span>clinicName:</span>
-                    <span>{clinicName}</span>
+                    <span className="selectable">{currentInfo.clinic.name}</span>
                 </div>
                 <div>
                     <span>employeeId:</span>
-                    <span>{employeeId}</span>
+                    <span className="selectable">{currentInfo.employee.id}</span>
                 </div>
                 <div>
                     <span>employeeShortId:</span>
-                    <span>{employeeShortId}</span>
+                    <span className="selectable">{currentInfo.employee.shortId}</span>
                 </div>
                 <div>
                     <span>employeeName:</span>
-                    <span>{employeeName}</span>
+                    <span className="selectable">{currentInfo.employee.name}</span>
                 </div>
 
             </div>
