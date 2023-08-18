@@ -60,27 +60,6 @@ chrome.runtime.onMessage.addListener((command: Command, sender, sendResponse: an
     }
 });
 
-function displayPatientInfo() {
-    const patientSectionWrapperEleColl = document.getElementsByClassName('patient-section-wrapper');
-    if (patientSectionWrapperEleColl.length == 0) {
-        return;
-    }
-
-    for (let patientSectionWrapperEle of patientSectionWrapperEleColl) {
-        // addTooltip(patientSectionWrapperEle, patientSectionWrapperEle.__vue__._props.value.id)
-        console.log(patientSectionWrapperEle.__vue__._props.value.id)
-    }
-}
-
-document.addEventListener('keydown', (event) => {
-    // cmd + v
-    if (event.metaKey && event.keyCode === 71) {
-        console.log('ffdsfaw')
-        // 显示患者信息
-        displayPatientInfo()
-    }
-});
-
 function decodeJwt(token: string) {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
