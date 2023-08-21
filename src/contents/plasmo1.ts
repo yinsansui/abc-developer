@@ -2,7 +2,7 @@ import type {PlasmoCSConfig} from "plasmo"
 import type {Command} from "~popup";
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://*/*"],
+    matches: ["https://*/*", "http://*/*"],
     world: "MAIN"
 }
 

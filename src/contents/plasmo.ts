@@ -2,7 +2,7 @@ import type {PlasmoCSConfig} from "plasmo"
 import type {Command} from "~popup";
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://*/*"]
+    matches: ["https://*/*", "http://*/*"]
 }
 
 export interface ExpireObjHolder<T> {
@@ -41,6 +41,7 @@ chrome.runtime.onMessage.addListener((command: Command, sender, sendResponse: an
     if (command.cmd === 'getCurrentClinicInfo') {
         const currentClinicInfoStr = window.localStorage.getItem('_current_clinic_');
         const expireObjHolder: ExpireObjHolder<CurrentClinicInfo> = JSON.parse(currentClinicInfoStr)
+        console.log(expireObjHolder)
         sendResponse(expireObjHolder.value);
     } else if (command.cmd === 'getCurrentEmployeeInfo') {
         // 解析cookie，从中获取 key 为 _global_token_ 的 value

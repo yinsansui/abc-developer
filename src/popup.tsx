@@ -53,6 +53,10 @@ function IndexPopup() {
     function getCurrentClinicInfo(): void {
         const command: Command = {cmd: 'getCurrentClinicInfo'}
         sendMessageToContentScript(command, function (clinicInfo: CurrentClinicInfo) {
+            if (!clinicInfo) {
+                return;
+            }
+
             setCurrentInfo(draft => {
                 // 连锁信息
                 draft.chain.id = clinicInfo.chain.id;
