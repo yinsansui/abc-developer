@@ -2,7 +2,7 @@ import type {PlasmoCSConfig} from "plasmo"
 import type {Command} from "~popup";
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://*/*", "http://*/*"]
+    matches: ["https://*.abcyun.cn/*", "https://*.abczs.cn/*", "http://*.abczs.cn/*"],
 }
 
 export interface ExpireObjHolder<T> {

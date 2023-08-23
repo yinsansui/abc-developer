@@ -2,8 +2,19 @@ import type {PlasmoCSConfig} from "plasmo"
 import type {Command} from "~popup";
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://*/*", "http://*/*"],
+    matches: ["https://*.abcyun.cn/*", "https://*.abczs.cn/*", "http://*.abczs.cn/*"],
     world: "MAIN"
+}
+
+function displayPatientStand() {
+    const itemPatientEleColl = document.getElementsByClassName('item-patient');
+    if (itemPatientEleColl.length == 0) {
+        return;
+    }
+
+    for (let itemPatientEle of itemPatientEleColl) {
+        addTooltip(itemPatientEle, itemPatientEle['__vue__']['_props']['patient']['id'])
+    }
 }
 
 function displayQuickList() {
@@ -13,12 +24,12 @@ function displayQuickList() {
     }
 
     for (let quickListItemWrapperEle of quickListItemWrapperEleColl) {
-        addTooltip(quickListItemWrapperEle, quickListItemWrapperEle.__vue__._props.quickItem.id)
+        addTooltip(quickListItemWrapperEle, quickListItemWrapperEle['__vue__']['_props']['quickItem']['id'])
     }
 }
 
 function displayDispensing() {
-    const dispensingFormEleColl = document.getElementsByClassName('abc-charge-table')[0].__vue__._props.dispensingForm
+    const dispensingFormEleColl = document.getElementsByClassName('abc-charge-table')[0]['__vue__']['_props']['dispensingForm']
     if (dispensingFormEleColl.length == 0) {
         return;
     }
@@ -46,7 +57,7 @@ function displayOutpatient() {
 
     for (let prescriptionTableWrapperEle of prescriptionTableWrapperEleColl) {
         // 处方ID
-        addTooltip(prescriptionTableWrapperEle, prescriptionTableWrapperEle.__vue__._props.form.id)
+        addTooltip(prescriptionTableWrapperEle, prescriptionTableWrapperEle['__vue__']['_props']['form']['id'])
         // // 药品列表
         const dragEleColl = prescriptionTableWrapperEle.getElementsByClassName('table-tr')
         if (dragEleColl.length > 0) {
@@ -57,14 +68,14 @@ function displayOutpatient() {
     }
 }
 
-function displayPatientInfo() {
+function displayPatientBarInfo() {
     const patientSectionWrapperEleColl = document.getElementsByClassName('patient-section-wrapper');
     if (patientSectionWrapperEleColl.length == 0) {
         return;
     }
 
     for (let patientSectionWrapperEle of patientSectionWrapperEleColl) {
-        addTooltip(patientSectionWrapperEle, patientSectionWrapperEle.__vue__._props.value.id)
+        addTooltip(patientSectionWrapperEle, patientSectionWrapperEle['__vue__']['_props']['value']['id'])
     }
 }
 
@@ -83,7 +94,12 @@ function addTooltip(targetElement, content) {
         tooltipNode.style.position = 'fixed';
         tooltipNode.style.overflow = 'unset';
         tooltipNode.style['z-index'] = 999999;
-        tooltipNode.style.backgroundColor = 'yellow';
+        tooltipNode.style['box-shadow'] = '0 2px 4px rgba(0, 0, 0, 0.1)';
+        tooltipNode.style['padding'] = '0 10px';
+        tooltipNode.style.borderRadius = '4px';
+        tooltipNode.style.backgroundColor = '#f2ff26';
+        tooltipNode.style.fontFamily = 'Helvetica, Tahoma, Arial'
+
         const tooltipTextNoe = document.createTextNode(content);
         tooltipNode.appendChild(tooltipTextNoe);
         document.body.appendChild(tooltipNode);
@@ -114,12 +130,14 @@ function removeTooltip() {
 document.addEventListener('keydown', (event) => {
     // cmd + v
     if (event.metaKey && event.keyCode === 75) {
-        // 显示患者信息
-        displayPatientInfo();
+        // 显示患者栏信息
+        displayPatientBarInfo();
         // 显示门诊处信息
         displayOutpatient();
         // 显示药房处信息
         // displayDispensing();
+        // 显示患者处信息
+        displayPatientStand();
         // 显示 ql 中的信息
         displayQuickList()
     } else if (event.keyCode === 27) {
