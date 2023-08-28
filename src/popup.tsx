@@ -97,43 +97,44 @@ function IndexPopup() {
             style={{
                 // display: "flex",
                 flexDirection: "column",
-                padding: 16
+                padding: 8,
+                width: '280px'
             }}>
             <div>
-                <div>
-                    <span>chainId:</span>
+                <div className="row">
+                    <span>连锁ID:</span>
                     <span className="selectable">{currentInfo.chain.id}</span>
                 </div>
-                <div>
-                    <span>chainShortId:</span>
+                <div className="row">
+                    <span>连锁短ID:</span>
                     <span className="selectable">{currentInfo.chain.shortId}</span>
                 </div>
-                <div>
-                    <span>chainName:</span>
+                <div className="row">
+                    <span>连锁名称:</span>
                     <span className="selectable">{currentInfo.chain.name}</span>
                 </div>
-                <div>
-                    <span>clinicId:</span>
+                <div className="row">
+                    <span>门店ID:</span>
                     <span className="selectable">{currentInfo.clinic.id}</span>
                 </div>
-                <div>
-                    <span>clinicShortId:</span>
+                <div className="row">
+                    <span>门店短ID:</span>
                     <span className="selectable">{currentInfo.clinic.shortId}</span>
                 </div>
-                <div>
-                    <span>clinicName:</span>
+                <div className="row">
+                    <span>门店名称:</span>
                     <span className="selectable">{currentInfo.clinic.name}</span>
                 </div>
-                <div>
-                    <span>employeeId:</span>
+                <div className="row">
+                    <span>员工ID:</span>
                     <span className="selectable">{currentInfo.employee.id}</span>
                 </div>
-                <div>
-                    <span>employeeShortId:</span>
+                <div className="row">
+                    <span>员工短ID:</span>
                     <span className="selectable">{currentInfo.employee.shortId}</span>
                 </div>
-                <div>
-                    <span>employeeName:</span>
+                <div className="row">
+                    <span>员工名称:</span>
                     <span className="selectable">{currentInfo.employee.name}</span>
                 </div>
 
