@@ -1,5 +1,7 @@
 import type {PlasmoCSConfig} from "plasmo"
 import type {Command} from "~popup";
+import {useHotkeys} from "react-hotkeys-hook";
+import {useImmer} from "use-immer";
 
 export const config: PlasmoCSConfig = {
     matches: ["https://*.abcyun.cn/*", "https://*.abczs.cn/*", "http://*.abczs.cn/*"],
@@ -361,34 +363,37 @@ function getCurrentModule(): Module {
 
 let latestModule: Module = null;
 
-document.addEventListener('keydown', (event) => {
-    // cmd + v
-    if (event.metaKey && event.keyCode === 75) {
-        const currentModule = getCurrentModule();
-        if (!currentModule) {
-            return;
-        }
-
-        currentModule.displayTip();
-
-        latestModule = currentModule;
-        // // 显示患者栏信息
-        // displayPatientBarInfo();
-        // // 显示门诊处信息
-        // displayOutpatient();
-        // // 显示药房处信息
-        // // displayDispensing();
-        // // 显示患者处信息
-        // displayPatientStand();
-        // // 显示 ql 中的信息
-        // displayQuickList()
-    } else if (event.keyCode === 27) {
-        // 移除所有的 tooltip 元素
-        if (latestModule == null) {
-            return;
-        }
-
-        latestModule.hiddenTip();
+function displayTip() {
+    const currentModule = getCurrentModule();
+    if (!currentModule) {
+        return;
     }
-});
-export {}
+
+    currentModule.displayTip();
+
+    latestModule = currentModule;
+}
+
+function hiddenTip() {
+    // 隐藏所有的 tooltip 元素
+    if (latestModule == null) {
+        return;
+    }
+
+    latestModule.hiddenTip();
+}
+
+function DisplayTipComponent() {
+
+    const [keymap] = useImmer({})
+
+    useHotkeys('ctrl+k', displayTip);
+    useHotkeys('esc', hiddenTip);
+
+    return (
+        <div>
+        </div>
+    )
+}
+
+export default DisplayTipComponent;
