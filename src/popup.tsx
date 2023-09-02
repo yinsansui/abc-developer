@@ -22,7 +22,8 @@ interface CurrentInfo {
 }
 
 export interface Command {
-    cmd: string
+    cmd: string,
+    data?: any
 }
 
 function IndexPopup() {
